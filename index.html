@@ -397,87 +397,103 @@
     
     // ==================== DATA PROFILING KECERDASAN ====================
     const mappingMi = {
-        "Visual-Spatial": { 
-            pekerjaan: "Arsitek, Desainer Grafis, Pilot, Fotografer, Animator, Sutradara", 
-            jurusan_sma: "Saintek", 
-            jurusan_kuliah: "Arsitektur, DKV, Teknik Sipil", 
-            ciri: "Belajar melalui visual dan gambar, peka terhadap bentuk, warna, dan ruang", 
-            optimasi: "Menggambar, mind mapping, puzzle spasial, fotografi",
-            deskripsi: "Kecerdasan Visual-Spatial adalah kemampuan untuk memvisualisasikan, membayangkan, dan memahami dunia melalui gambar, ruang, dan arah. Kamu berpikir dalam bentuk gambar, bukan sekadar kata-kata.",
-            motivasi: "Dunia membutuhkan visimu! Jangan pernah merasa kamu lambat hanya karena cara belajarmu berbeda. Kemampuanmu membayangkan bentuk dan ruang adalah langkah pertama untuk membangun masa depan yang luar biasa.",
-            tokoh: "Albert Einstein, Walt Disney, Leonardo da Vinci"
-        },
-        "Logical-Mathematical": { 
-            pekerjaan: "Programmer, Analis Data, Ilmuwan, Aktuaris, Insinyur", 
-            jurusan_sma: "Saintek", 
-            jurusan_kuliah: "Matematika, Informatika, Statistika, Fisika", 
-            ciri: "Berpikir logis dan sistematis, senang memecahkan masalah", 
-            optimasi: "Soal logika, coding, catur, eksperimen sains",
-            deskripsi: "Kecerdasan Logical-Mathematical adalah kemampuan untuk berpikir analitis, mengenali pola, dan memecahkan masalah secara logis. Kamu adalah pemecah teka-teki alami yang selalu mencari 'mengapa' dan 'bagaimana'.",
-            motivasi: "Otakmu adalah mesin analisis yang luar biasa! Di era digital ini, kemampuan logismu adalah kunci untuk membuka pintu inovasi. Teruslah pertajam logikamu, karena dunia dijalankan oleh orang-orang yang bisa memecahkan masalah.",
-            tokoh: "Bill Gates, Isaac Newton, Stephen Hawking"
-        },
-        "Linguistic": { 
-            pekerjaan: "Penulis, Jurnalis, Pengacara, Guru, Penerjemah", 
-            jurusan_sma: "Bahasa/IPS", 
-            jurusan_kuliah: "Sastra, Hukum, Komunikasi, Pendidikan Bahasa", 
-            ciri: "Pandai merangkai kata, senang membaca dan menulis", 
-            optimasi: "Membaca buku, menulis blog, debat, public speaking",
-            deskripsi: "Kecerdasan Linguistic adalah kemampuan merangkai kata, memahami makna mendalam dari bahasa, dan mengungkapkan ide dengan jelas. Kata-kata adalah senjatamu untuk menginspirasi dan meyakinkan.",
-            motivasi: "Kata-katamu memiliki kekuatan untuk menggerakkan dunia! Kamu adalah pemimpin yang berbicara melalui tulisan dan ucapan. Teruslah membaca dan bercerita, karena ceritamu bisa mengubah hidup banyak orang.",
-            tokoh: "J.K. Rowling, Soekarno, Pramoedya Ananta Toer"
-        },
-        "Musical": { 
-            pekerjaan: "Musisi, Komposer, Produser Musik, Sound Engineer, Guru Musik", 
-            jurusan_sma: "Bahasa/Seni", 
-            jurusan_kuliah: "Seni Musik, Etnomusikologi, Produksi Musik", 
-            ciri: "Peka terhadap nada, irama, dan harmoni", 
-            optimasi: "Belajar alat musik, olah vokal, mendengarkan berbagai genre",
-            deskripsi: "Kecerdasan Musical adalah kepekaan terhadap nada, ritme, dan pola suara. Kamu mendengar dunia sebagai simfoni yang indah dan mampu menangkap emosi melalui melodi.",
-            motivasi: "Hidupmu adalah simfoni yang luar biasa! Dengarkan intuisimu dan biarkan kreativitasmu bernyanyi. Di dunia yang penuh kebisingan, kemampuanmu menciptakan harmoni adalah hadiah yang sangat berharga.",
-            tokoh: "Mozart, Iwan Fals, Beethoven"
-        },
-        "Interpersonal": { 
-            pekerjaan: "Psikolog, HRD, Sales, Guru, Konselor, Marketing", 
-            jurusan_sma: "IPS", 
-            jurusan_kuliah: "Psikologi, Manajemen, Komunikasi", 
-            ciri: "Mudah bergaul, empati, senang bekerja dalam tim", 
-            optimasi: "Organisasi, komunikasi, leadership, volunteering",
-            deskripsi: "Kecerdasan Interpersonal adalah kemampuan memahami perasaan, motivasi, dan niat orang lain. Kamu adalah perekat sosial yang membuat orang-orang di sekitarmu merasa dipahami dan dihargai.",
-            motivasi: "Kamu adalah perekat yang menyatukan orang-orang! Empatimu adalah kekuatan super di dunia yang terhubung ini. Jangan pernah merasa minder, kemampuanmu memimpin dan memahami orang lain adalah tiket emas menuju kesuksesan.",
-            tokoh: "Nelson Mandela, Oprah Winfrey, BJ Habibie"
-        },
-        "Intrapersonal": { 
-            pekerjaan: "Peneliti, Entrepreneur, Konsultan, Trainer, Coach", 
-            jurusan_sma: "IPS/Bahasa", 
-            jurusan_kuliah: "Psikologi, Filsafat, Manajemen", 
-            ciri: "Sadar diri, mandiri, punya target jelas", 
-            optimasi: "Menulis jurnal, meditasi, perencanaan hidup",
-            deskripsi: "Kecerdasan Intrapersonal adalah kedalaman untuk memahami diri sendiri, mengelola emosi, dan memiliki kompas internal yang kuat. Kamu tahu siapa dirimu dan apa yang kamu mau.",
-            motivasi: "Mengenal diri adalah awal dari segala kebijaksanaan! Kamu punya pondasi mental yang sangat kuat. Teruslah mendengarkan suara hatimu, karena dari sanalah lahir keputusan-keputusan besar yang akan mengubah duniamu.",
-            tokoh: "Mahatma Gandhi, Socrates, Aristoteles"
-        },
-        "Kinesthetic": { 
-            pekerjaan: "Atlet, Penari, Aktor, Mekanik, Pilot, Ahli Bedah", 
-            jurusan_sma: "Saintek/SMK", 
-            jurusan_kuliah: "PJOK, Seni Tari, Teknik Mesin", 
-            ciri: "Belajar sambil bergerak, koordinasi tubuh baik", 
-            optimasi: "Olahraga, menari, praktik langsung, kerajinan tangan",
-            deskripsi: "Kecerdasan Kinesthetic adalah kemampuan mengkoordinasikan tubuh dan pikiran dengan presisi. Kamu belajar terbaik melalui sentuhan, gerakan, dan aksi langsung.",
-            motivasi: "Tubuhmu adalah instrumen terbaikmu! Energi dan aksimu bisa mengubah mimpi menjadi kenyataan. Jangan pernah merasa kamu tidak bisa diam, karena dari gerakanmulah lahir karya nyata yang menginspirasi.",
-            tokoh: "Cristiano Ronaldo, Charlie Chaplin, Michael Jordan"
-        },
-        "Naturalist": { 
-            pekerjaan: "Dokter Hewan, Petani, Biolog, Geolog, Konservasionis", 
-            jurusan_sma: "Saintek", 
-            jurusan_kuliah: "Biologi, Kedokteran Hewan, Agroteknologi", 
-            ciri: "Suka alam, peka terhadap lingkungan", 
-            optimasi: "Berkebun, hiking, konservasi, beternak",
-            deskripsi: "Kecerdasan Naturalist adalah kepekaan terhadap alam, tumbuhan, hewan, dan ekosistem. Kamu merasa terhubung dengan lingkungan dan memiliki intuisi yang kuat terhadap keseimbangan hidup.",
-            motivasi: "Kamu adalah penjaga bumi ini! Kedekatanmu dengan alam membawa keseimbangan dan solusi untuk masa depan planet kita. Teruslah menjaga dan mempelajari alam, dunia membutuhkan kepekaanmu.",
-            tokoh: "Charles Darwin, Steve Irwin, Jane Goodall"
-        }
-    };
+    "Visual-Spatial": { 
+        pekerjaan: "Arsitek, Desainer Grafis, Pilot, Fotografer, Animator, Sutradara, Perancang Interior, Surveyor, Kartografer, Ahli Bedah, Pecatur, Urban Planner, Game Designer, UI/UX Designer, Drone Pilot, Virtual Reality Designer, Exhibition Designer, Set Designer Film, Arkeolog Visual, Desainer Pameran",
+        jurusan_sma: "Saintek / SMK",
+        jurusan_kuliah: "Arsitektur, Desain Komunikasi Visual (DKV), Teknik Sipil, Perencanaan Wilayah Kota (PWK), Teknik Penerbangan, Desain Interior, Animasi, Teknik Geodesi, Kedokteran (Bedah), Seni Rupa, Desain Produk, Arsitektur Lanskap, Desain Game, Teknik Multimedia, Film dan Televisi",
+        jurusan_smk: "Desain Grafis, Teknik Gambar Bangunan, Teknik Konstruksi, Animasi, Teknik Penerbangan, Desain Interior, Teknik Survei dan Pemetaan, Multimedia, Arsitektur, Teknik Komputer Jaringan (TKJ) - Bidang Desain Web, Produksi Film",
+        jurusan_poltek: "Teknik Arsitektur, Teknik Sipil, Desain Grafis, Animasi, Teknologi Game, Teknik Penerbangan, Teknik Geodesi, Perencanaan Wilayah dan Kota",
+        ciri: "Belajar melalui visual dan gambar, peka terhadap bentuk, warna, dan ruang",
+        optimasi: "Menggambar, mind mapping, puzzle spasial, fotografi",
+        deskripsi: "Kemampuan membayangkan bentuk 3D, membaca peta, dan peka terhadap detail visual.",
+        motivasi: "Dunia butuh visimu! Kamu punya mata untuk detail dan imajinasi ruang yang luar biasa.",
+        tokoh: "Albert Einstein, Walt Disney, Leonardo da Vinci"
+    },
+    "Logical-Mathematical": { 
+        pekerjaan: "Programmer, Analis Data, Ilmuwan, Aktuaris, Insinyur, Ahli Statistik, Data Scientist, AI Engineer, Cybersecurity Analyst, Risk Analyst, Software Architect, Game Developer, Peneliti, Dosen Matematika, Financial Analyst, Cryptographer, QA Engineer, DevOps Engineer, Database Administrator, Sistem Informasi Geografis",
+        jurusan_sma: "Saintek / SMK",
+        jurusan_kuliah: "Matematika, Informatika, Statistika, Fisika, Teknik Informatika, Sistem Informasi, Data Science, Aktuaria, Teknik Komputer, Manajemen Informatika, Ilmu Komputer, Rekayasa Perangkat Lunak, Keamanan Siber, Teknik Elektro, Riset Operasi",
+        jurusan_smk: "Rekayasa Perangkat Lunak (RPL), Teknik Komputer Jaringan (TKJ), Multimedia (bidang pemrograman), Sistem Informatika, Jaringan dan Aplikasi Web, Data Analyst Pemula, Teknik Elektronika Industri",
+        jurusan_poltek: "Teknik Informatika, Sistem Informasi, Statistika Terapan, Manajemen Informatika, Teknologi Rekayasa Perangkat Lunak, Data Analytics, Jaringan Komputer, Keamanan Siber",
+        ciri: "Berpikir logis dan sistematis, senang memecahkan masalah dan mencari pola",
+        optimasi: "Soal logika, coding, catur, eksperimen sains",
+        deskripsi: "Kemampuan analitis, mengenali pola, dan memecahkan masalah secara logis.",
+        motivasi: "Otakmu adalah mesin analisis luar biasa! Teruslah pertajam logikamu.",
+        tokoh: "Bill Gates, Isaac Newton, Stephen Hawking"
+    },
+    "Linguistic": { 
+        pekerjaan: "Penulis, Jurnalis, Pengacara, Guru, Penerjemah, Editor, Copywriter, Content Creator, Diplomat, Public Speaker, Penyiar, Humas, Peneliti Bahasa, Novelis, Penyair, Sastrawan, Dosen Bahasa, Reporter, Konten Kreator, Voice Over Artist",
+        jurusan_sma: "Bahasa / IPS",
+        jurusan_kuliah: "Sastra, Hukum, Jurnalistik, Ilmu Komunikasi, Pendidikan Bahasa, Hubungan Internasional, Psikologi, Ilmu Perpustakaan, Linguistik, Filsafat, Penyiaran, Public Relations, Hubungan Masyarakat, Periklanan",
+        jurusan_smk: "Broadcasting, Perhotelan (Front Office), Sekretaris, Administrasi Perkantoran, Public Relations, Pemasaran (Copywriting), Bahasa Asing, Komunikasi Digital, Content Creator",
+        jurusan_poltek: "Komunikasi Terapan, Sekretaris, Public Relations, Jurnalistik, Periklanan, Bahasa Asing Terapan, Hubungan Masyarakat, Penyiaran",
+        ciri: "Pandai merangkai kata, senang membaca, menulis, dan berdiskusi",
+        optimasi: "Membaca buku, menulis blog, debat, public speaking",
+        deskripsi: "Kemampuan mengolah kata, memahami makna, dan menyampaikan ide dengan jelas.",
+        motivasi: "Kata-katamu punya kekuatan menggerakkan dunia! Teruslah menulis dan berbicara.",
+        tokoh: "J.K. Rowling, Soekarno, Pramoedya Ananta Toer"
+    },
+    "Musical": { 
+        pekerjaan: "Musisi, Komposer, Produser Musik, Sound Engineer, Guru Musik, Terapis Musik, Penyanyi, DJ, Arranger, Pencipta Lagu, Konduktor Orkestra, Music Director, Audio Editor, Music Producer, Penata Musik Film, Pengisi Suara (bidang musik), Instrumentalis, Music Therapist, Event Organizer Musik",
+        jurusan_sma: "Bahasa / Seni",
+        jurusan_kuliah: "Seni Musik, Etnomusikologi, Pendidikan Musik, Audio Engineering, Produksi Musik, Musik Gereja, Penciptaan Musik, Musikologi, Seni Karawitan, Seni Tari (iringan musik), Desain Suara",
+        jurusan_smk: "Seni Musik, Seni Karawitan, Tata Suara, Audio Video, Broadcasting (bidang suara), Multimedia (audio editing), Peralatan Musik, Produksi Musik",
+        jurusan_poltek: "Teknik Audio, Produksi Musik, Tata Suara, Sound Engineering, Musik Digital, Studio Recording, Musik Gereja Terapan",
+        ciri: "Peka terhadap nada, irama, harmoni, dan mudah mengingat melodi",
+        optimasi: "Belajar alat musik, olah vokal, mendengarkan berbagai genre",
+        deskripsi: "Kepekaan terhadap suara, ritme, dan ekspresi musikal.",
+        motivasi: "Hidupmu adalah simfoni yang luar biasa! Biarkan kreativitasmu bernyanyi.",
+        tokoh: "Mozart, Iwan Fals, Beethoven"
+    },
+    "Interpersonal": { 
+        pekerjaan: "Psikolog, HRD, Sales, Guru, Konselor, Marketing, Public Relations, Diplomat, Manajer, Fasilitator, Event Organizer, Customer Service, Resepsionis, Pramugari, Polisi (bidang pelayanan), Perawat, Pekerja Sosial, Konsultan SDM, Mediator, Negosiator",
+        jurusan_sma: "IPS / SMK",
+        jurusan_kuliah: "Psikologi, Manajemen, Ilmu Komunikasi, Hubungan Internasional, Sosiologi, Pendidikan, Bimbingan Konseling, Administrasi Bisnis, Pemasaran, Ilmu Politik, Antropologi",
+        jurusan_smk: "Pemasaran, Administrasi Perkantoran, Akomodasi Perhotelan, Perjalanan Wisata, Public Relations, Customer Service, Manajemen Perkantoran, Usaha Perjalanan Wisata, Broadcasting (bidang komunikasi)",
+        jurusan_poltek: "Manajemen Pemasaran, Administrasi Bisnis, Perhotelan, Pariwisata, Humas, Manajemen Sumber Daya Manusia, Manajemen Perkantoran, Komunikasi Terapan",
+        ciri: "Mudah bergaul, empati, senang bekerja dalam tim, peka terhadap orang lain",
+        optimasi: "Organisasi, komunikasi, leadership, volunteering",
+        deskripsi: "Kemampuan memahami, berinteraksi, dan bekerja sama dengan orang lain.",
+        motivasi: "Kamu adalah perekat yang menyatukan orang-orang! Empatimu adalah kekuatan super.",
+        tokoh: "Nelson Mandela, Oprah Winfrey, BJ Habibie"
+    },
+    "Intrapersonal": { 
+        pekerjaan: "Peneliti, Entrepreneur, Konsultan, Trainer, Coach, Penulis Buku Pengembangan Diri, Filosof, Psikolog Klinis, Dosen, Motivator, Branding Consultant, Perencana Keuangan, Life Coach, Mentor, Editor Buku Pengembangan, Konselor Pribadi, Pembicara Seminar, Peneliti Independen, Pekerja Lepas (Freelancer)",
+        jurusan_sma: "IPS / Bahasa",
+        jurusan_kuliah: "Psikologi, Filsafat, Sosiologi, Antropologi, Manajemen, Kewirausahaan, Pendidikan, Bimbingan Konseling, Ilmu Politik, Studi Pembangunan, Ekonomi Syariah, Manajemen Bisnis",
+        jurusan_smk: "Bisnis Daring dan Pemasaran, Akuntansi, Administrasi Perkantoran, Kewirausahaan, Manajemen Perkantoran, Perbankan Syariah, Manajemen Logistik, Usaha Perjalanan Wisata",
+        jurusan_poltek: "Manajemen Bisnis, Kewirausahaan, Akuntansi, Manajemen Keuangan, Perbankan Syariah, Manajemen Logistik, Pengembangan Sumber Daya Manusia",
+        ciri: "Sadar diri, mandiri, punya target dan rencana hidup yang jelas",
+        optimasi: "Menulis jurnal, meditasi, membuat perencanaan hidup, belajar dari pengalaman",
+        deskripsi: "Kemampuan memahami diri sendiri, mengelola emosi, dan memiliki kompas internal.",
+        motivasi: "Mengenal diri adalah awal kebijaksanaan! Kamu punya pondasi mental yang kuat.",
+        tokoh: "Mahatma Gandhi, Socrates, Aristoteles"
+    },
+    "Kinesthetic": { 
+        pekerjaan: "Atlet, Penari, Aktor, Mekanik, Pilot, Ahli Bedah, Pelatih Olahraga, Koreografer, Tukang Kayu, Montir, Polisi (reserse/lapangan), Tentara (tempur), Pramuka, Penyelam, Petinju, Seniman Bela Diri, Terapis Fisik, Tukang Las, Perakit Elektronik, Koki",
+        jurusan_sma: "Saintek / SMK",
+        jurusan_kuliah: "Pendidikan Jasmani, Seni Tari, Teknik Mesin, Kedokteran, Kepelatihan Olahraga, Seni Peran, Fisioterapi, Rekayasa Manufaktur, Teknik Otomotif, Pendidikan Kepelatihan, Ilmu Keolahragaan",
+        jurusan_smk: "Teknik Kendaraan Ringan (TKR), Teknik Sepeda Motor (TSM), Teknik Mesin, Teknik Pemesinan, Tata Busana, Kriya Kreatif, Perhotelan (Food & Beverage), Seni Tari, Seni Peran, Teknik Pengelasan",
+        jurusan_poltek: "Teknik Mesin, Teknik Otomotif, Teknik Manufaktur, Seni Tari, Seni Peran, Fisioterapi, Teknik Perawatan Pesawat, Teknik Elektro",
+        ciri: "Belajar sambil bergerak, koordinasi tubuh baik, senang aktivitas fisik",
+        optimasi: "Olahraga, menari, praktik langsung, kerajinan tangan",
+        deskripsi: "Kemampuan mengkoordinasikan tubuh dan pikiran dengan presisi.",
+        motivasi: "Tubuhmu adalah instrumen terbaikmu! Energimu bisa mengubah mimpi jadi nyata.",
+        tokoh: "Cristiano Ronaldo, Charlie Chaplin, Michael Jordan"
+    },
+    "Naturalist": { 
+        pekerjaan: "Dokter Hewan, Petani, Ahli Biologi, Geolog, Konservasionis, Chef, Peternak, Ahli Lingkungan, Botanis, Zoologis, Arkeolog, Pertanian, Perkebunan, Kehutanan, Kelautan, Peneliti Lingkungan, Konsultan Lingkungan, Agronom, Pemandu Alam, Pengelola Taman Nasional",
+        jurusan_sma: "Saintek / SMK Pertanian",
+        jurusan_kuliah: "Biologi, Kedokteran Hewan, Agroteknologi, Kehutanan, Geografi, Ilmu Lingkungan, Peternakan, Perikanan, Teknologi Pangan, Arkeologi, Geologi, Oseanografi, Konservasi Sumber Daya Alam",
+        jurusan_smk: "Agribisnis, Agroteknologi, Keperawatan Hewan, Perikanan, Kelautan, Kehutanan, Tata Boga (Food Processing), Kimia Industri (lingkungan), Teknik Lingkungan, Perkebunan, Peternakan",
+        jurusan_poltek: "Teknologi Pangan, Agribisnis, Perikanan, Peternakan, Kehutanan, Konservasi Lingkungan, Teknik Lingkungan, Bioteknologi, Teknologi Benih",
+        ciri: "Suka alam, peka terhadap lingkungan, mudah mengenali flora-fauna",
+        optimasi: "Berkebun, hiking, konservasi, beternak",
+        deskripsi: "Kemampuan memahami alam, ekosistem, makhluk hidup, dan lingkungan.",
+        motivasi: "Kamu adalah penjaga bumi ini! Dunia membutuhkan kepekaanmu terhadap alam.",
+        tokoh: "Charles Darwin, Steve Irwin, Jane Goodall"
+    }
+};
 
     // ==================== WELCOME & UTILITY ====================
     function hideWelcome() {
