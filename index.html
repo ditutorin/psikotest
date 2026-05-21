@@ -279,19 +279,7 @@
                 </div>
             </div>
         </div>
-
-        <div id="halamanHasil" style="display: none;">
-            <div class="card" id="hasilPrintArea">
-                <div style="text-align: center; margin-bottom: 20px;">
-                    <h1 style="justify-content: center;"><i class="fa-solid fa-chart-pie"></i> Hasil Tes</h1>
-                    <p id="hasilNama" style="font-size: 18px; color: #555;"></p>
-                </div>
-                <div id="hasilContainer"></div>
-            </div>
-            <div class="card no-print" style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-                <button class="btn btn-secondary" onclick="resetToForm()"><i class="fa-solid fa-rotate-right"></i> Selesai</button>
-            </div>
-        </div>
+       
     </div>
 
     <!-- ==================== ADMIN PAGE ==================== -->
@@ -653,57 +641,55 @@
     }
     
     async function finishTes() {
-        if (isSubmitting) return;
-        
-        const unanswered = jawabanSiswa.filter(j => j === null).length;
-        if (unanswered > 0) {
-            showToast(`<i class='fa-solid fa-circle-exclamation'></i> Masih ada ${unanswered} soal belum dijawab!`, true);
-            return;
-        }
-        
-        isSubmitting = true;
-        showLoading(true);
-        
-        const hasil = hitungHasilLokal();
-        
-        const payload = {
-            action: "submitTes",
-            nama: siswaData.nama,
-            kelas: siswaData.kelas,
-            asal_sekolah: siswaData.sekolah,
-            cabang: siswaData.cabang,
-            jawaban: soalList.map((soal, idx) => ({
-                id_soal: soal.id,
-                nilai: jawabanSiswa[idx]
-            })),
-            tipe_mi_tertinggi: hasil.tipe_mi_tertinggi,
-            tipe_riasec_tertinggi: hasil.tipe_riasec_tertinggi,
-            skor_mi_json: JSON.stringify(hasil.semua_skor_mi),
-            skor_riasec_json: JSON.stringify(hasil.semua_skor_riasec)
-        };
-        
-        try {
-            await fetch(APPS_SCRIPT_URL, {
-                method: "POST",
-                mode: "no-cors",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            });
-            
-            showToast("<i class='fa-solid fa-circle-check'></i> Jawaban berhasil disimpan!");
-            
-            tampilkanHasil(hasil, siswaData);
-            
-            document.getElementById('halamanTes').style.display = 'none';
-            document.getElementById('halamanHasil').style.display = 'block';
-            
-        } catch (err) {
-            showToast("Error: " + err.message, true);
-        } finally {
-            isSubmitting = false;
-            showLoading(false);
-        }
+    if (isSubmitting) return;
+    
+    const unanswered = jawabanSiswa.filter(j => j === null).length;
+    if (unanswered > 0) {
+        showToast(`<i class='fa-solid fa-circle-exclamation'></i> Masih ada ${unanswered} soal belum dijawab!`, true);
+        return;
     }
+    
+    isSubmitting = true;
+    showLoading(true);
+    
+    const hasil = hitungHasilLokal();
+    
+    const payload = {
+        action: "submitTes",
+        nama: siswaData.nama,
+        kelas: siswaData.kelas,
+        asal_sekolah: siswaData.sekolah,
+        cabang: siswaData.cabang,
+        jawaban: soalList.map((soal, idx) => ({
+            id_soal: soal.id,
+            nilai: jawabanSiswa[idx]
+        })),
+        tipe_mi_tertinggi: hasil.tipe_mi_tertinggi,
+        tipe_riasec_tertinggi: hasil.tipe_riasec_tertinggi,
+        skor_mi_json: JSON.stringify(hasil.semua_skor_mi),
+        skor_riasec_json: JSON.stringify(hasil.semua_skor_riasec)
+    };
+    
+    try {
+        await fetch(APPS_SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+        
+        showToast("<i class='fa-solid fa-circle-check'></i> Tes selesai! Terima kasih.");
+        
+        // ✅ LANGSUNG RESET KE FORM AWAL (TANPA TAMPILKAN HASIL)
+        resetToForm();
+        
+    } catch (err) {
+        showToast("Error: " + err.message, true);
+    } finally {
+        isSubmitting = false;
+        showLoading(false);
+    }
+}
     
     function hitungHasilLokal() {
         const skorMi = {
