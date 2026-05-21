@@ -370,7 +370,6 @@
 
 <script>
     // ==================== KONFIGURASI ====================
-    // 🔴 GANTI URL_INI dengan URL Apps Script kamu!
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw40uabGJAKyNTrousH_B8CFerdWsGme8amhfsLubTdugwgZcCT88pKC3OY07nvg8Ge/exec";
     
     let soalList = [];
@@ -378,8 +377,8 @@
     let currentSoalIndex = 0;
     let adminToken = "";
     let chartInstance = null;
+    let modalChartInstance = null;  // ✅ PERBAIKAN 1: deklarasi modalChartInstance
     let isSubmitting = false;
-    let modalChartInstance = null;
     
     let siswaData = { nama: "", kelas: "", sekolah: "", cabang: "" };
     
@@ -550,7 +549,6 @@
                 
                 document.getElementById('formIdentitas').style.display = 'none';
                 document.getElementById('halamanTes').style.display = 'block';
-                document.getElementById('halamanHasil').style.display = 'none';
                 
                 updateProgress();
                 renderSoal();
@@ -680,7 +678,7 @@
         
         showToast("<i class='fa-solid fa-circle-check'></i> Tes selesai! Terima kasih.");
         
-        // ✅ LANGSUNG RESET KE FORM AWAL (TANPA TAMPILKAN HASIL)
+        // ✅ PERBAIKAN 2: reset ke form awal tanpa error
         resetToForm();
         
     } catch (err) {
@@ -756,95 +754,14 @@
         });
     }
     
-    function tampilkanHasil(hasil, dataSiswa) {
-        const container = document.getElementById('hasilContainer');
-        document.getElementById('hasilNama').innerHTML = `<strong>${escapeHtml(dataSiswa.nama)}</strong> | Kelas: ${escapeHtml(dataSiswa.kelas)} | ${escapeHtml(dataSiswa.sekolah)} | Cabang: ${escapeHtml(dataSiswa.cabang)}`;
-        
-        const miLabels = Object.keys(hasil.semua_skor_mi);
-        const miValues = Object.values(hasil.semua_skor_mi);
-        const rekom = hasil.rekomendasi;
-        
-        let html = `
-            <div style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border-radius: 20px; padding: 25px; text-align: center; margin-bottom: 25px;">
-                <div class="badge">🎯 TIPE KECERDASAN DOMINAN</div>
-                <div style="font-size: 36px; font-weight: 800; color: #2e7d32;">${hasil.tipe_mi_tertinggi}</div>
-                <div style="font-size: 16px; margin-top:5px;">Skor: ${hasil.skor_mi_tertinggi} / 5.00</div>
-                <div style="margin-top: 8px; color: #555;">Tipe RIASEC: <strong>${hasil.tipe_riasec_tertinggi}</strong> (Skor: ${hasil.skor_riasec_tertinggi})</div>
-            </div>
-            
-            <div class="info-card" style="margin-bottom: 20px;">
-                <div class="badge"><i class="fa-solid fa-microscope"></i> Apa itu Kecerdasan ${hasil.tipe_mi_tertinggi}?</div>
-                <p style="line-height: 1.7; color: #444;">${rekom.deskripsi}</p>
-            </div>
-
-            <div class="motivation-card">
-                <div class="motivation-text">${rekom.motivasi}</div>
-                <div class="role-model-badge">
-                    <i class="fa-solid fa-star"></i> Tokoh: ${rekom.tokoh}
-                </div>
-            </div>
-            
-            <h2 style="margin-top: 30px;"><i class="fa-solid fa-compass"></i> Peta Jalan Masa Depanmu</h2>
-            <div class="result-grid">
-                <div class="info-card">
-                    <div class="badge"><i class="fa-solid fa-briefcase"></i> Pekerjaan yang Sesuai</div>
-                    <p>${rekom.pekerjaan}</p>
-                </div>
-                <div class="info-card">
-                    <div class="badge"><i class="fa-solid fa-school"></i> Jurusan SMA</div>
-                    <p>${rekom.jurusan_sma}</p>
-                </div>
-                <div class="info-card">
-                    <div class="badge"><i class="fa-solid fa-graduation-cap"></i> Jurusan Kuliah</div>
-                    <p>${rekom.jurusan_kuliah}</p>
-                </div>
-                <div class="info-card">
-                    <div class="badge"><i class="fa-solid fa-eye"></i> Ciri Umum</div>
-                    <p>${rekom.ciri}</p>
-                </div>
-                <div class="info-card">
-                    <div class="badge"><i class="fa-solid fa-chalkboard-user"></i> Cara Mengoptimalkan</div>
-                    <p>${rekom.optimasi}</p>
-                </div>
-            </div>
-            
-            <div style="margin-top: 30px;">
-                <h3>📊 Grafik Skor Multiple Intelligences</h3>
-                <canvas id="skorChart" style="max-height: 350px;"></canvas>
-            </div>
-        `;
-        container.innerHTML = html;
-        
-        if (chartInstance) chartInstance.destroy();
-        const ctx = document.getElementById('skorChart').getContext('2d');
-        chartInstance = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: miLabels,
-                datasets: [{
-                    label: 'Skor (1-5)',
-                    data: miValues,
-                    backgroundColor: miLabels.map(label => label === hasil.tipe_mi_tertinggi ? 'rgba(46, 125, 50, 0.9)' : 'rgba(76, 175, 80, 0.5)'),
-                    borderColor: miLabels.map(label => label === hasil.tipe_mi_tertinggi ? '#1b5e20' : '#4caf50'),
-                    borderWidth: 1,
-                    borderRadius: 8
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                scales: { y: { min: 0, max: 5, title: { display: true, text: 'Skor' } } },
-                plugins: { legend: { display: false } }
-            }
-        });
-    }
-    
+    // ✅ PERBAIKAN 3: resetToForm tanpa referensi halamanHasil
     function resetToForm() {
         if (confirm("Apakah Anda yakin ingin kembali ke halaman utama? Hasil tes tidak akan hilang karena sudah tersimpan di database.")) {
             soalList = [];
             jawabanSiswa = [];
             currentSoalIndex = 0;
             if (chartInstance) { chartInstance.destroy(); chartInstance = null; }
+            if (modalChartInstance) { modalChartInstance.destroy(); modalChartInstance = null; }
             
             document.getElementById('nama').value = '';
             document.getElementById('kelas').value = '';
@@ -853,7 +770,7 @@
             
             document.getElementById('formIdentitas').style.display = 'block';
             document.getElementById('halamanTes').style.display = 'none';
-            document.getElementById('halamanHasil').style.display = 'none';
+            // halamanHasil tidak ada, jadi tidak usah dipanggil
         }
     }
     
@@ -979,7 +896,6 @@
             try { skorMi = JSON.parse(hasilData.skor_mi_json); } catch(e) { console.log(e); }
         }
         
-        // Fallback jika tidak ada data skor
         if (Object.keys(skorMi).length === 0) {
             skorMi = {
                 "Visual-Spatial": 0, "Logical-Mathematical": 0, "Linguistic": 0,
@@ -1029,7 +945,6 @@
         
         document.getElementById('modalLaporan').style.display = 'flex';
         
-        // Render chart
         setTimeout(() => {
             const ctx = document.getElementById('modalChart');
             if (ctx) {
