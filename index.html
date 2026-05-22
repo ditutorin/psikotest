@@ -5,25 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>PsikoRouter | Tes Minat & Bakat (RIASEC + IST)</title>
     
-    <!-- Font & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: #f0f7f0;
-            min-height: 100vh;
-            color: #333;
-        }
+        body { font-family: 'Poppins', sans-serif; background: #f0f7f0; min-height: 100vh; color: #333; }
 
         .welcome-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -37,14 +30,9 @@
         .welcome-logo { font-size: 4rem; margin-bottom: 1rem; animation: float 3s ease-in-out infinite; }
         .welcome-title { font-size: 3rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: 1px; }
         .welcome-tagline { font-size: 1.2rem; font-weight: 300; margin-bottom: 3rem; max-width: 600px; opacity: 0.9; }
-        .btn-explore {
-            padding: 18px 40px; font-size: 1.2rem; font-weight: 600; color: #1b5e20;
-            background: white; border: none; border-radius: 50px; cursor: pointer;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3); transition: all 0.3s;
-            display: inline-flex; align-items: center; gap: 12px;
-        }
+        .btn-explore { padding: 18px 40px; font-size: 1.2rem; font-weight: 600; color: #1b5e20; background: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.3); transition: all 0.3s; display: inline-flex; align-items: center; gap: 12px; }
         .btn-explore:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.4); background: #f1f8e9; }
-        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
+        @keyframes float { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
 
         .container { max-width: 900px; margin: 0 auto; padding: 20px; }
         .card { background: white; border-radius: 24px; box-shadow: 0 10px 40px rgba(46, 125, 50, 0.08); padding: 35px; margin-bottom: 25px; border: 1px solid rgba(46, 125, 50, 0.1); }
@@ -295,6 +283,10 @@
     const istSubtes = ["PU", "FG", "PV", "PA", "KA", "AB", "MB", "S2", "S3"];
     const istNames = { PU: "Pengetahuan Umum", FG: "Figural", PV: "Penalaran Verbal", PA: "Penalaran Angka", KA: "Aritmatika", AB: "Penalaran Abstrak", MB: "Memori", S2: "Spasial 2D", S3: "Spasial 3D" };
     
+    // Cache untuk mapping
+    let mappingRiasecCache = null;
+    let mappingIstCache = null;
+    
     // ==================== UTILITY ====================
     function hideWelcome() {
         document.getElementById('welcomeScreen').classList.add('hide');
@@ -332,6 +324,20 @@
     
     function shuffleArray(arr) { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
     
+    async function loadMappings() {
+        if (!mappingRiasecCache) {
+            const res = await fetch(`${APPS_SCRIPT_URL}?action=getMappingRiasec`);
+            const data = await res.json();
+            mappingRiasecCache = data.data;
+        }
+        if (!mappingIstCache) {
+            const res = await fetch(`${APPS_SCRIPT_URL}?action=getMappingIst`);
+            const data = await res.json();
+            mappingIstCache = data.data;
+        }
+        return { riasec: mappingRiasecCache, ist: mappingIstCache };
+    }
+    
     // ==================== SISWA FUNCTIONS ====================
     async function startTes() {
         const nama = document.getElementById('nama').value.trim();
@@ -348,7 +354,6 @@
         showToast("Memuat soal...");
         
         try {
-            // Ambil semua soal RIASEC dan IST
             const [resRiasec, resIst] = await Promise.all([
                 fetch(`${APPS_SCRIPT_URL}?action=getSoalRiasec`),
                 fetch(`${APPS_SCRIPT_URL}?action=getSoalIst`)
@@ -358,15 +363,10 @@
             const dataIst = await resIst.json();
             
             if (dataRiasec.success && dataIst.success) {
-                // Acak dan ambil 80 soal RIASEC
                 let riasecSoal = shuffleArray([...dataRiasec.data]);
                 riasecSoal = riasecSoal.slice(0, 80);
-                
-                // Acak dan ambil 40 soal IST
                 let istSoal = shuffleArray([...dataIst.data]);
                 istSoal = istSoal.slice(0, 40);
-                
-                // Gabungkan dan acak urutan soal
                 soalList = shuffleArray([...riasecSoal, ...istSoal]);
                 jawabanSiswa = new Array(soalList.length).fill(null);
                 currentSoalIndex = 0;
@@ -391,19 +391,15 @@
         const jawaban = jawabanSiswa[currentSoalIndex];
         const labels = { 1: 'Sangat Tidak Setuju', 2: 'Tidak Setuju', 3: 'Netral', 4: 'Setuju', 5: 'Sangat Setuju' };
         
-        let html = `<div class="soal-item">
-            <div class="soal-text"><span class="soal-number">${currentSoalIndex + 1}</span>${escapeHtml(soal.pertanyaan)}</div>
-            <div class="options">`;
+        let html = `<div class="soal-item"><div class="soal-text"><span class="soal-number">${currentSoalIndex + 1}</span>${escapeHtml(soal.pertanyaan)}</div><div class="options">`;
         
         if (soal.pilihan && soal.pilihan !== "") {
-            // Soal IST dengan pilihan ganda
             const pilihanArr = soal.pilihan.split(',');
             html += pilihanArr.map(pil => `<label class="option ${jawaban === pil ? 'selected' : ''}" onclick="setJawabanPG('${pil}', this)">
                 <input type="radio" name="jawaban" value="${pil}" ${jawaban === pil ? 'checked' : ''}>
                 <div class="checkmark"></div><span>${pil}</span>
             </label>`).join('');
         } else {
-            // Soal RIASEC dengan skala 1-5
             html += [1,2,3,4,5].map(nilai => `<label class="option ${jawaban === nilai ? 'selected' : ''}" onclick="setJawaban(${nilai}, this)">
                 <input type="radio" name="jawaban" value="${nilai}" ${jawaban === nilai ? 'checked' : ''}>
                 <div class="checkmark"></div><span>${labels[nilai]}</span>
@@ -461,7 +457,6 @@
         isSubmitting = true;
         showLoading(true);
         
-        // Hitung skor RIASEC dan IST
         const skorRiasec = { Realistic:0, Investigative:0, Artistic:0, Social:0, Enterprising:0, Conventional:0 };
         const countRiasec = { Realistic:0, Investigative:0, Artistic:0, Social:0, Enterprising:0, Conventional:0 };
         const skorIst = { PU:0, FG:0, PV:0, PA:0, KA:0, AB:0, MB:0, S2:0, S3:0 };
@@ -542,8 +537,8 @@
     
     function loadAdminDataDemo() {
         const demoData = [
-            { id_siswa: "DEMO_001", nama: "Muhammad Hazalitsa Amin", kelas: "9G", asal_sekolah: "SMPN 10 BEKASI", cabang: "Bekasi Raya", tipe_riasec_tertinggi: "Artistic", subtes_ist_tertinggi: "FG", skor_riasec_json: '{"Realistic":3.2,"Investigative":3.5,"Artistic":4.5,"Social":3.8,"Enterprising":3.1,"Conventional":3.0}', skor_ist_json: '{"PU":3.5,"FG":4.8,"PV":4.0,"PA":3.2,"KA":3.5,"AB":3.8,"MB":3.6,"S2":4.2,"S3":4.0}' },
-            { id_siswa: "DEMO_002", nama: "Aisyah Putri", kelas: "11 IPA 2", asal_sekolah: "SMAN 1 Bekasi", cabang: "Bekasi Kota", tipe_riasec_tertinggi: "Investigative", subtes_ist_tertinggi: "PA", skor_riasec_json: '{"Realistic":3.0,"Investigative":4.5,"Artistic":3.5,"Social":3.2,"Enterprising":3.0,"Conventional":3.2}', skor_ist_json: '{"PU":3.8,"FG":3.2,"PV":3.5,"PA":4.6,"KA":4.2,"AB":3.8,"MB":3.5,"S2":3.0,"S3":3.2}' }
+            { id_siswa: "DEMO_001", nama: "Muhammad Hazalitsa Amin", kelas: "9G", asal_sekolah: "SMPN 10 BEKASI", cabang: "Bekasi Raya", tipe_riasec_tertinggi: "Enterprising", subtes_ist_tertinggi: "PU", skor_riasec_json: '{"Realistic":2.5,"Investigative":3.0,"Artistic":3.5,"Social":3.8,"Enterprising":4.2,"Conventional":2.8}', skor_ist_json: '{"PU":4.5,"FG":3.0,"PV":3.5,"PA":3.2,"KA":3.0,"AB":3.0,"MB":3.5,"S2":2.8,"S3":2.5}' },
+            { id_siswa: "DEMO_002", nama: "Aisyah Putri", kelas: "11 IPA 2", asal_sekolah: "SMAN 1 Bekasi", cabang: "Bekasi Kota", tipe_riasec_tertinggi: "Investigative", subtes_ist_tertinggi: "PA", skor_riasec_json: '{"Realistic":3.0,"Investigative":4.5,"Artistic":3.2,"Social":3.0,"Enterprising":2.8,"Conventional":3.2}', skor_ist_json: '{"PU":3.5,"FG":3.2,"PV":3.5,"PA":4.5,"KA":4.0,"AB":3.8,"MB":3.5,"S2":3.0,"S3":3.2}' }
         ];
         renderAdminTable(demoData); populateFilterOptions(demoData);
     }
@@ -552,7 +547,7 @@
         const tbody = document.getElementById('adminTableBody'); tbody.innerHTML = '';
         for (const row of data) {
             const tr = document.createElement('tr');
-            tr.innerHTML = `<td>${row.id_siswa || '-'}</td><td>${escapeHtml(row.nama || '-')}</td><td>${escapeHtml(row.kelas || '-')}</td><td>${escapeHtml(row.asal_sekolah || '-')}</td><td>${escapeHtml(row.cabang || '-')}</td>
+            tr.innerHTML = `<tr>${row.id_siswa || '-'}</td><td>${escapeHtml(row.nama || '-')}</td><td>${escapeHtml(row.kelas || '-')}</td><td>${escapeHtml(row.asal_sekolah || '-')}</td><td>${escapeHtml(row.cabang || '-')}</td>
                 <td><span class="badge">${row.tipe_riasec_tertinggi || '-'}</span></td><td><span class="badge">${row.subtes_ist_tertinggi || '-'}</span></td>
                 <td><button class="btn btn-secondary" style="padding: 8px 15px; font-size: 13px;" onclick="viewLaporan(this)" data-siswa='${JSON.stringify(row).replace(/'/g, "&#39;")}'><i class="fa-solid fa-eye"></i> Lihat</button></td>`;
             tbody.appendChild(tr);
@@ -582,42 +577,99 @@
         }
     }
     
-    function viewLaporan(btnElement) {
+    async function viewLaporan(btnElement) {
         showToast("Memuat laporan...");
         const hasilData = JSON.parse(btnElement.getAttribute('data-siswa'));
+        
         let skorRiasec = {}, skorIst = {};
         if (hasilData.skor_riasec_json) { try { skorRiasec = JSON.parse(hasilData.skor_riasec_json); } catch(e) {} }
         if (hasilData.skor_ist_json) { try { skorIst = JSON.parse(hasilData.skor_ist_json); } catch(e) {} }
         
+        // Ambil mapping dari cache atau API
+        const { riasec: mappingRiasec, ist: mappingIst } = await loadMappings();
+        
+        const dataRiasec = mappingRiasec[hasilData.tipe_riasec_tertinggi] || {};
+        const dataIst = mappingIst[hasilData.subtes_ist_tertinggi] || {};
+        
         const modalContent = document.getElementById('modalLaporanContent');
         modalContent.innerHTML = `
-            <div style="text-align:center; margin-bottom:20px;"><h3 style="color:#2e7d32;">📊 HASIL TES PSIKOROUTER</h3>
-            <p><strong>${escapeHtml(hasilData.nama)}</strong> | Kelas: ${escapeHtml(hasilData.kelas)} | ${escapeHtml(hasilData.asal_sekolah)} | ${escapeHtml(hasilData.cabang)}</p></div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
-                <div><h3 style="text-align:center;">🎯 RIASEC (Minat)</h3><canvas id="modalChartRiasec" style="max-height:250px;"></canvas>
-                <p style="text-align:center; margin-top:10px;"><strong>Tipe Dominan:</strong> <span class="badge">${hasilData.tipe_riasec_tertinggi}</span></p></div>
-                <div><h3 style="text-align:center;">🧠 IST (Kemampuan)</h3><canvas id="modalChartIst" style="max-height:250px;"></canvas>
-                <p style="text-align:center; margin-top:10px;"><strong>Subtes Tertinggi:</strong> <span class="badge">${hasilData.subtes_ist_tertinggi} - ${istNames[hasilData.subtes_ist_tertinggi] || hasilData.subtes_ist_tertinggi}</span></p></div>
+            <div style="text-align:center; margin-bottom:20px;">
+                <h3 style="color:#2e7d32;">📊 HASIL TES PSIKOROUTER</h3>
+                <p><strong>${escapeHtml(hasilData.nama)}</strong> | Kelas: ${escapeHtml(hasilData.kelas)} | ${escapeHtml(hasilData.asal_sekolah)} | ${escapeHtml(hasilData.cabang)}</p>
             </div>
-            <div style="margin-top:20px; background:#e8f5e9; border-radius:16px; padding:20px;">
-                <h3 style="margin-top:0;">📌 Rekomendasi</h3>
-                <p>Kombinasi <strong>${hasilData.tipe_riasec_tertinggi}</strong> dan kemampuan <strong>${istNames[hasilData.subtes_ist_tertinggi] || hasilData.subtes_ist_tertinggi}</strong> sangat cocok untuk karir yang membutuhkan ${hasilData.tipe_riasec_tertinggi} ditambah dengan ${hasilData.subtes_ist_tertinggi}.</p>
-                <p style="margin-top:10px;">✅ Jurusan SMA: <strong>Saintek / IPS / Bahasa</strong><br>✅ Jurusan SMK: Sesuai dengan minat dan bakat<br>✅ Jurusan PTN: Sesuai dengan minat dan bakat</p>
+            
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px;">
+                <div style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9); border-radius:16px; padding:20px; text-align:center;">
+                    <div class="badge">🎯 TIPE RIASEC DOMINAN</div>
+                    <div style="font-size:28px; font-weight:800; color:#2e7d32;">${hasilData.tipe_riasec_tertinggi}</div>
+                    <div style="font-size:14px; margin-top:8px;">${dataRiasec.deskripsi || ''}</div>
+                </div>
+                <div style="background:linear-gradient(135deg,#e3f2fd,#bbdef5); border-radius:16px; padding:20px; text-align:center;">
+                    <div class="badge">🧠 SUBTES IST TERTINGGI</div>
+                    <div style="font-size:28px; font-weight:800; color:#1565c0;">${hasilData.subtes_ist_tertinggi}</div>
+                    <div style="font-size:14px; margin-top:8px;">${dataIst.nama || ''} - ${dataIst.deskripsi || ''}</div>
+                </div>
+            </div>
+            
+            <div style="background:#1b5e20; color:white; border-radius:16px; padding:20px; margin-bottom:20px;">
+                <div style="font-size:18px; font-weight:600; margin-bottom:10px;">💡 Rekomendasi Karier</div>
+                <p>Kombinasi <strong>${hasilData.tipe_riasec_tertinggi}</strong> dan kemampuan <strong>${dataIst.nama || hasilData.subtes_ist_tertinggi}</strong> sangat cocok untuk karir di bidang:</p>
+                <p style="margin-top:10px; font-size:15px;">${dataRiasec.pekerjaan || 'Belum tersedia'}</p>
+            </div>
+            
+            <div class="result-grid" style="margin-top:20px;">
+                <div class="info-card">
+                    <div class="badge">🏫 Jurusan SMA</div>
+                    <p><strong>${dataRiasec.jurusan_sma || 'Saintek / IPS / Bahasa'}</strong></p>
+                </div>
+                <div class="info-card">
+                    <div class="badge">🛠️ Jurusan SMK (Vokasi)</div>
+                    <p><strong>${dataRiasec.jurusan_smk || 'Sesuai dengan minat dan bakat'}</strong></p>
+                    <p style="font-size:12px; margin-top:8px;">Lulusan SMK bisa langsung kerja atau lanjut ke politeknik</p>
+                </div>
+                <div class="info-card">
+                    <div class="badge">🎓 Jurusan Politeknik (D3/D4)</div>
+                    <p><strong>${dataRiasec.jurusan_poltek || dataRiasec.jurusan_smk || 'Sesuai dengan minat dan bakat'}</strong></p>
+                    <p style="font-size:12px; margin-top:8px;">Pendidikan vokasi terapan, lulus siap kerja</p>
+                </div>
+                <div class="info-card">
+                    <div class="badge">🏛️ Jurusan PTN (S1)</div>
+                    <p><strong>${dataRiasec.jurusan_ptn || 'Sesuai dengan minat dan bakat'}</strong></p>
+                </div>
+            </div>
+            
+            <div style="margin-top:20px;">
+                <h3 style="font-size:16px;">📊 Grafik Skor RIASEC</h3>
+                <canvas id="modalChartRiasec" style="max-height:250px;"></canvas>
+                <h3 style="font-size:16px; margin-top:20px;">📊 Grafik Skor IST</h3>
+                <canvas id="modalChartIst" style="max-height:250px;"></canvas>
             </div>
         `;
         
         document.getElementById('modalLaporan').style.display = 'flex';
         
         setTimeout(() => {
-            const ctxRiasec = document.getElementById('modalChartRiasec');
-            const ctxIst = document.getElementById('modalChartIst');
-            if (ctxRiasec) {
-                if (modalChartRiasec) modalChartRiasec.destroy();
-                modalChartRiasec = new Chart(ctxRiasec, { type: 'bar', data: { labels: Object.keys(skorRiasec), datasets: [{ label: 'Skor', data: Object.values(skorRiasec), backgroundColor: Object.keys(skorRiasec).map(l => riasecColors[l] || "#4caf50"), borderRadius: 8 }] }, options: { responsive: true, maintainAspectRatio: true, scales: { y: { min: 0, max: 5 } }, plugins: { legend: { display: false } } } });
+            if (Object.keys(skorRiasec).length > 0) {
+                const ctxRiasec = document.getElementById('modalChartRiasec');
+                if (ctxRiasec) {
+                    if (modalChartRiasec) modalChartRiasec.destroy();
+                    modalChartRiasec = new Chart(ctxRiasec, {
+                        type: 'bar',
+                        data: { labels: Object.keys(skorRiasec), datasets: [{ label: 'Skor', data: Object.values(skorRiasec), backgroundColor: '#4caf50', borderRadius: 8 }] },
+                        options: { responsive: true, maintainAspectRatio: true, scales: { y: { min: 0, max: 5 } }, plugins: { legend: { display: false } } }
+                    });
+                }
             }
-            if (ctxIst) {
-                if (modalChartIst) modalChartIst.destroy();
-                modalChartIst = new Chart(ctxIst, { type: 'bar', data: { labels: Object.keys(skorIst).map(k => istNames[k] || k), datasets: [{ label: 'Skor', data: Object.values(skorIst), backgroundColor: "#2196F3", borderRadius: 8 }] }, options: { responsive: true, maintainAspectRatio: true, scales: { y: { min: 0, max: 5 } }, plugins: { legend: { display: false } } } });
+            if (Object.keys(skorIst).length > 0) {
+                const ctxIst = document.getElementById('modalChartIst');
+                if (ctxIst) {
+                    if (modalChartIst) modalChartIst.destroy();
+                    modalChartIst = new Chart(ctxIst, {
+                        type: 'bar',
+                        data: { labels: Object.keys(skorIst).map(k => istNames[k] || k), datasets: [{ label: 'Skor', data: Object.values(skorIst), backgroundColor: '#2196f3', borderRadius: 8 }] },
+                        options: { responsive: true, maintainAspectRatio: true, scales: { y: { min: 0, max: 5 } }, plugins: { legend: { display: false } } }
+                    });
+                }
             }
         }, 200);
     }
